@@ -47,14 +47,15 @@ Function.prototype.apply = Function.prototype.apply || function (context, args) 
 /**
  * 模拟实现bind
  * 1. 绑定this
- * 2. 参数处理，由两部分组成，bind调用传入和返回函数中传入
+ * 2. 参数处理，由两部分组成，bind调用传入和返回函数中传入（函数柯里化）
  * 3. 返回一个新函数
  * 4. new操作处理
  * 5. 传入对象为null
+ * 6. 原型处理
  * @param {*} context 
  * @returns {Function} 返回函数
  */
-function bind(context) {
+Function.prototype.bind = function (context) {
   if (!(this instanceof Function)) { throw new Error('caller not function!'); }
   context = context || window;
   var args = Array.prototype.slice.call(arguments, 1);

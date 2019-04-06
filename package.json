@@ -1,0 +1,25 @@
+{
+  "name": "practice",
+  "version": "0.1.0",
+  "description": "demo实现",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yang131323/practice.git"
+  },
+  "keywords": [
+    "node.js",
+    "js",
+    "html",
+    "css"
+  ],
+  "author": "is Q",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yang131323/practice/issues"
+  },
+  "homepage": "https://github.com/yang131323/practice#readme"
+}
