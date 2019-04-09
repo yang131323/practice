@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Holy Grail</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+    }
+
+    section, main, header, footer {
+      margin: 0;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+      height: 100%;
+    }
+
+    .main, .header, .footer, .right, .left, .content {
+      text-align: center;
+    }
+
+    .main {
+      display: flex;
+      min-height: 90%;
+      box-sizing: border-box;
+    }
+
+    .left {
+      flex: 1;
+      background-color: aqua;
+      height: 400px;
+      /* border: 1px solid black; */
+    }
+
+    .content {
+      flex: 3 1 auto;
+      height: 400px;
+      background-color: greenyellow;
+    }
+
+    .right {
+      flex: 1;
+      height: 400px;
+      background-color: yellowgreen;
+    }
+
+    .header, .footer {
+      flex: 1;
+      height: 5%;
+      background-color: aquamarine;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="header">This is header!</header>
+    <main class="main">
+      <section class="left">Left</section>
+      <section class="content">This is content!</section>
+      <section class="right">Right</section>
+    </main>
+    <footer class="header">This is footer!</footer>
+  </div>
+</body>
+</html>
