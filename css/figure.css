@@ -1,0 +1,201 @@
+html, body {
+  height: 100%;
+}
+
+.container {
+  height: auto;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+div {
+  margin: 20px;
+}
+
+.circle {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: yellowgreen;
+}
+
+.oval {
+  width: 100px;
+  height: 50px;
+  border-radius: 100px / 50px; /* width / height */
+  background-color: yellowgreen;
+}
+
+.top-triangle {
+  height: 0;
+  width: 0;
+  border-bottom: 100px solid yellowgreen;
+  border-left: 50px solid transparent;
+  border-right: 50px solid transparent;
+}
+
+.bottom-triangle {
+  height: 0;
+  width: 0;
+  border-top: 100px solid yellowgreen;
+  border-left: 50px solid transparent;
+  border-right: 50px solid transparent;
+}
+
+.bottom-triangle {
+  height: 0;
+  width: 0;
+  border-top: 100px solid yellowgreen;
+  border-left: 50px solid transparent;
+  border-right: 50px solid transparent;
+}
+
+.left-bottom-straight-triangle {
+  height: 0;
+  width: 0;
+  border-bottom: 100px solid transparent;
+  border-left: 100px solid yellowgreen;
+}
+
+.right-bottom-straight-triangle {
+  height: 0;
+  width: 0;
+  border-bottom: 100px solid transparent;
+  border-right: 100px solid yellowgreen;
+}
+
+.left-top-straight-triangle {
+  height: 0;
+  width: 0;
+  border-bottom: 100px solid yellowgreen;
+  border-right: 100px solid transparent;
+}
+
+.right-top-straight-triangle {
+  height: 0;
+  width: 0;
+  border-bottom: 100px solid yellowgreen;
+  border-left: 100px solid transparent;
+}
+
+.right-triangle {
+  height: 0;
+  height: 0;
+  border-top: 50px solid transparent;
+  border-left: 100px solid yellowgreen;
+  border-bottom: 50px solid transparent;
+}
+
+.left-triangle {
+  height: 0;
+  height: 0;
+  border-top: 50px solid transparent;
+  border-right: 100px solid yellowgreen;
+  border-bottom: 50px solid transparent;
+}
+
+.trapzoid {
+  width: 100px;
+  border-right: 10px solid transparent;
+  border-left: 10px solid transparent;
+  border-bottom: 50px solid yellowgreen;
+}
+
+.parallelogram {
+  width: 100px;
+  height: 50px;
+  transform: skew(25deg);
+  background-color: yellowgreen;
+}
+
+.six-star {
+  position: relative;
+  width: 0;
+  height: 0;
+  border-bottom: 100px solid yellowgreen;
+  border-left: 50px solid transparent;
+  border-right: 50px solid transparent;
+}
+
+.six-star:before {
+  width: 0;
+  height: 0;
+  content: "";
+  position: absolute;
+  left: -50px;
+  top: 30px;
+  border-top: 100px solid yellowgreen;
+  border-left: 50px solid transparent;
+  border-right: 50px solid transparent;
+}
+
+.five-star {
+  width: 0;
+  height: 0;
+  margin-top: 40px;
+  position: relative;
+  border-top: 50px solid yellowgreen;
+  border-left: 60px solid transparent;
+  border-right: 60px solid transparent;
+}
+
+.five-star:before {
+  content: "";
+  position: absolute;
+  top: -45px;
+  left: -60px;
+  transform: rotate(-70deg);
+  border-top: 50px solid yellowgreen;
+  border-left: 60px solid transparent;
+  border-right: 60px solid transparent;
+}
+
+.five-star:after {
+  content: "";
+  position: absolute;
+  top: -45px;
+  left: -60px;
+  transform: rotate(65deg);
+  border-top: 50px solid yellowgreen;
+  border-left: 60px solid transparent;
+  border-right: 60px solid transparent;
+}
+
+.gigantic {
+  width: 220px;
+  height: 150px;
+  position: relative;
+}
+
+.gigantic:after {
+  content: "";
+  width: 60px;
+  height: 60px;
+  position: absolute;
+  right: 0;
+  transform: rotate(45deg);
+  border-radius: 60px 60px 60px 0;
+  border: 20px solid yellowgreen; 
+}
+
+.gigantic:before {
+  content: "";
+  width: 60px;
+  height: 60px;
+  position: absolute;
+  transform: rotate(-45deg);
+  border-radius: 60px 60px 0 60px;
+  border: 20px solid yellowgreen; 
+}
+
+.pcm-man {
+  width: 0;
+  height: 0;
+  border-radius: 60px;
+  border-right: 60px solid transparent;
+  border-top: 60px solid yellowgreen;
+  border-bottom: 60px solid yellowgreen;
+  border-left: 60px solid yellowgreen;
+}
