@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="../css/commission.css">
+  <title>Commission</title>
+</head>
+<body>
+  <ul id="test-ul">
+    <li>
+      <h3>Horse1</h3>
+      <p>The horse is one of two extant subspecies of Equus ferus. It is an odd-toed ungulate mammal belonging to the taxonomic family Equidae. The horse has evolved over the past 45 to 55 million years from a small multi-toed creature, Eohippus, into the large, single-toed animal of today.</p>
+    </li>
+    <li>
+      <h3>Horse2</h3>
+      <p>The horse is one of two extant subspecies of Equus ferus. It is an odd-toed ungulate mammal belonging to the taxonomic family Equidae. The horse has evolved over the past 45 to 55 million years from a small multi-toed creature, Eohippus, into the large, single-toed animal of today.</p>
+    </li>
+    <li>
+      <h3>Horse3</h3>
+      <p>The horse is one of two extant subspecies of Equus ferus. It is an odd-toed ungulate mammal belonging to the taxonomic family Equidae. The horse has evolved over the past 45 to 55 million years from a small multi-toed creature, Eohippus, into the large, single-toed animal of today.</p>
+    </li>
+    <li>
+      <h3>Horse4</h3>
+      <p>The horse is one of two extant subspecies of Equus ferus. It is an odd-toed ungulate mammal belonging to the taxonomic family Equidae. The horse has evolved over the past 45 to 55 million years from a small multi-toed creature, Eohippus, into the large, single-toed animal of today.</p>
+    </li>
+    <li>
+      <h3>Horse5</h3>
+      <p>The horse is one of two extant subspecies of Equus ferus. It is an odd-toed ungulate mammal belonging to the taxonomic family Equidae. The horse has evolved over the past 45 to 55 million years from a small multi-toed creature, Eohippus, into the large, single-toed animal of today.</p>
+    </li>
+    <li>
+      <h3>Horse6</h3>
+      <p>The horse is one of two extant subspecies of Equus ferus. It is an odd-toed ungulate mammal belonging to the taxonomic family Equidae. The horse has evolved over the past 45 to 55 million years from a small multi-toed creature, Eohippus, into the large, single-toed animal of today.</p>
+    </li>
+  </ul>
+  <ul class="test-ul" id="item-ul-parent">
+    <li><span>item1</span>
+      <ul class="item-ul">
+        <li><span>item12</span></li>
+        <li><span>item12</span></li>
+        <li><span>item13</span></li>
+      </ul>
+    </li>
+    <li><span>item2</span>
+      <ul class="item-ul">
+        <li><span>item21</span></li>
+        <li><span>item22</span></li>
+        <li><span>item2</span></li>
+      </ul>
+    </li>
+    <li><span>item3</span>
+      <ul class="item-ul">
+        <li><span>item31</span></li>
+        <li><span>item32</span></li>
+        <li><span>item33</span></li>
+      </ul>
+    </li>
+  </ul>
+  <table id="orTable">
+    <thead>
+      <tr>
+        <th data-type="number">Serial</th>
+        <th data-type="string">Name</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>6</td>
+        <td>Baishi</td>
+      </tr>
+      <tr>
+        <td>1</td>
+        <td>isQ</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>Tengxun</td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td>Bytedance</td>
+      </tr>
+      <tr>
+        <td>8</td>
+        <td>Baidu</td>
+      </tr>
+      <tr>
+        <td>9</td>
+        <td>Xiecheng</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>Ali</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td>Didi</td>
+      </tr>
+      <tr>
+        <td>7</td>
+        <td>Meituan</td>
+      </tr>
+      <tr>
+        <td>10</td>
+        <td>Vip</td>
+      </tr>
+    </tbody>
+  </table>
+  <script>
+    function testUl () {
+      const dom = document.getElementById('test-ul');
+      dom.addEventListener('click', function (e) {
+        const target = e.target;
+        const parent = target.closest('li');
+        if (parent) {
+          let inputValue = confirm(parent.innerText);
+          console.log('inputValue: ' + inputValue);
+        } else {
+          alert('very sorry, not have a dom!');
+        }
+      })
+    }
+
+    function treeItem () {
+      const dom = document.getElementById('item-ul-parent');
+      dom.addEventListener('click', function clickHandle (e) {
+        const target = e.target;
+        const parent = target.closest('li');
+        if (target.tagName !== 'SPAN') { return; }
+        const childs = parent.querySelector('ul');
+        if (childs) { childs.hidden = !childs.hidden; }
+      })
+    }
+
+    function orderTable () {
+      let obj = {
+        'number': function num (val1, val2) {
+          return val1.cells[this.index].innerText - val2.cells[this.index].innerText;
+        },
+        'string': function str (val1, val2) {
+          const str1 = val1.cells[this.index].innerText;
+          const str2 = val2.cells[this.index].innerText;
+          return str1 > str2 ? 1 : (str1 === str2) ? 0 : -1;
+        }
+      }
+      orTable.onclick = function (e) {
+        const target = e.target;
+        if (target.tagName !== 'TH') { return; }
+        const type = target.dataset['type'];
+        obj.index = target.cellIndex;
+        const tbody = orTable.querySelector('tbody');
+        let itemArr = [].slice.call(tbody.rows);
+        itemArr.sort(obj[type].bind(obj));
+        tbody.append(...itemArr);
+      }
+    }
+
+    testUl();
+    treeItem();
+    orderTable();
+  </script>
+</body>
+</html>

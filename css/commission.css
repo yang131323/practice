@@ -1,0 +1,34 @@
+h3 {
+  display: inline-block;
+}
+
+.test-ul {
+  list-style: square inside;
+}
+
+.item-ul {
+  list-style: circle outside;
+}
+
+ul span:hover {
+  font-weight: 800;
+}
+
+table {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+table th, table td {
+  border: 1px solid black;
+  text-align: center;
+}
+
+table th {
+  color: greenyellow;
+  font-weight: bold;
+}
+
+table th:hover {
+  background-color: yellow;
+}
