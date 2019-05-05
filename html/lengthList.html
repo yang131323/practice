@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Length List</title>
+  <style>
+    .container {
+      position: relative;
+      top: 0;
+      left: 0;
+      height: 900px;
+      border: 1px solid darkcyan;
+      overflow: auto;
+    }
+
+    .list-phantom {
+      /* position: absolute; */
+      z-index: -1;
+      top: 0;
+      left: 0;
+    }
+
+    .list-content-view {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+    }
+
+    .list-content {
+      width: 98%;
+      display: inline-block;
+      border: 1px solid salmon;
+      text-align: center;
+      /* box-sizing: border-box; */
+      margin: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="container">
+    <div class="list-phantom" style="height: 100000px;"></div>
+    <div class="list-content-view" id="list-content">
+      <div class="list-content">1</div>
+    </div>
+  </div>
+  <script>
+    // 缓存计算过的列表项距离容器顶部的值
+    let domHeightCache = {};
+    // 缓存源数据
+    let sourceData = {};
+    // 视窗可见列表
+    let visibleDom = [];
+    // 视窗可见第一个索引
+    let start = 0;
+    // 已生成多少个列表元素
+    let num = 0;
+    // 上次触发列表项scrollTop高度
+    let preTop = 0;
+
+    // 获取元素高度
+    function getItemHeight (index) {
+      return sourceData[index] || (sourceData[index] = (30 + (index % 10) + Math.floor(Math.random() * 10)));
+    }
+
+
+    // 判断为上滚，寻找起始点
+    function desc () {
+      const scrollTop = document.getElementById('container').scrollTop;
+      for (let i = start;; i--) {
+        if(domHeightCache[i] <= scrollTop) {
+          start = i;
+          preTop = domHeightCache[start];
+          break;
+        }
+      }
+    }
+
+    // 判断为是下拉，寻找起始点
+    function add () {
+      const scrollTop = document.getElementById('container').scrollTop;
+      for (let i = start;; i++) { 
+        if (getCache(i) > scrollTop) {
+          start = i - 1;
+          preTop = getCache(start);
+          break;
+        }
+      }
+    }
+
+    // 判断是下拉还是上滚
+    function getStart () {
+      if (!num) { return; }
+      const scrollTop = document.getElementById('container').scrollTop;
+      if (scrollTop < preTop) {
+        desc();
+        return;
+      }
+      add();
+    }
+
+    // 获取index索引的高度
+    function getCache (index) {
+      return domHeightCache[index] || (domHeightCache[index] = index ? (domHeightCache[index - 1] + getItemHeight(index) + 10) : 0);
+    }
+
+    // 滚动事件触发函数
+    function handleScroll () {
+      visibleDom = [];
+      let total = 0;
+      const dom = document.getElementById('container');
+      const viewHeight = dom.clientHeight;
+      const scrollTop = dom.scrollTop;
+      getStart();
+      for (let i = start;; i++) {
+        if (getCache(i) >= (viewHeight + scrollTop)) {
+          num = i + 1;
+          break;
+        }
+        visibleDom.push(`<div class="list-content" style="line-height: ${getItemHeight(i)}px">${i + 1}</div>`);
+      }
+      const content = document.getElementById('list-content');
+      content.innerHTML = visibleDom.join('');
+      content.style.transform = `translate3d(0px,${domHeightCache[start]}px,0px)`;
+    }
+
+    /**
+     * 节流函数：滚动事件触发太过于频繁，需要限制某段事件内只能触动一次
+     */
+    function throttling(fn, delay, time) {
+      let pre = Date.now();
+      let tId;
+      return function fun(...rest) {
+        console.log(1);
+        const now = Date.now();
+        clearTimeout(tId);
+        if ((now - pre) >= time) {
+          fn.apply(this, rest);
+          pre = now;
+        } else {
+          tId = setTimeout(() => {
+            fn(rest);
+            pre = Date.now();
+          }, delay);
+        }
+      };
+    }
+
+    const dom = document.getElementById('container');
+    dom.onscroll = throttling(handleScroll, 200, 500);
+    handleScroll(); // 初始化首屏
+  </script>
+</body>
+</html>
