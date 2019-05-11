@@ -49,3 +49,125 @@ function decarator (id, fn) {
     dom.onclick = fn;
   }
 }
+
+/**
+ * 单例模式（IIFE）
+ */
+const singleMode = (function () {
+  let isInstance = null;
+  return function (name, id, age) {
+    if (!new.target) { throw new Error('This is a Constructor Function, please use new keyword!'); }
+    if (isInstance) { return isInstance; }
+    this.name = name;
+    this.id = id;
+    this.age = age;
+    isInstance = this;
+  }
+}())
+
+
+/**
+ * 观察者模式/Subject类，必须使用new关键字进行实例化
+ * 观察者模式：维护一个依赖列表，当内容更新时主动通知，依赖列表里面的所有Observe。
+ */
+function Subject () {
+  if (!new.target) { throw new Error('This is a Constructor Function, please use new keyword!'); }
+  this.list = [];
+}
+
+/**
+ * 由于每个Subject都有添加、删除和通知功能，为了节省资源消耗，所有实例共享这些方法。
+ * 但是重写prototype会丢失constructor属性，因此需要给constructor重新赋值
+ */
+Subject.prototype = {
+  constructor: Subject,
+  add (observe) {
+    this.list.push(observe);
+  },
+  remove (observe) {
+    let isAdd = this.list.indexOf(observe);
+    if (isAdd === -1) { throw new Error('you not have add Observe!'); }
+    this.list.splice(isAdd, 1);
+  },
+  notify (notice) {
+    let len = this.list.length;
+    for (let i = 0; i < len; i++) {
+      this.list[i].update(notice);
+    }
+  }
+}
+
+/**
+ * 观察者模式/Observe类，必须使用new关键字进行实例化
+ * @param {String} name Observe名字
+ */
+function Observe (name) {
+  if (!new.target) { throw new Error('This is a Constructor Function, please use new keyword!'); }
+  this.name = name;
+}
+
+/**
+ * 由于每个Observe都有update消息功能，为了节省资源消耗，所有实例共享这个方法。
+ * 但是重写prototype会丢失constructor属性，因此需要给constructor重新赋值
+ */
+Observe.prototype = {
+  constructor: Observe,
+  update (notice) {
+    console.log('My name is ' + this.name + ', I attention "' + notice + '" ready update!');
+  }
+}
+
+/**
+ * 发布-订阅模式
+ * 发布订阅模式：与观察者的区别在于发布订阅不直接与发布者关联，它有一个调度中心
+ * 订阅者只管在调度中心订阅就行，发布者只需要在调度中心发布通知。
+ */
+const PublishSubscribe = new class {
+  constructor () {
+    this.subscribeCenter = {}
+  }
+  publish (event, mes) {
+    if (!(event in this.subscribeCenter)) {
+      alert('not subscriber!');
+      return;
+    }
+    const subscribes = this.subscribeCenter[event];
+    const len = subscribes.length;
+    for (let i = 0; i < len; i++) {
+      subscribes[i].notice(mes);
+    }
+  }
+  subscribe (event, sub) {
+    if (!this.subscribeCenter[event]) { this.subscribeCenter[event] = []; }
+    this.subscribeCenter[event].push(sub);
+  }
+  unSubscribe (event, sub) {
+    const haveEvent = event in this.subscribeCenter;
+    const isHave = this.subscribeCenter[event].indexOf(sub)
+    if (!haveEvent || !~isHave) {
+      alert('you not subscribe: ' + event);
+      return;
+    }
+    this.subscribeCenter[event].splice(isHave, 1);
+  }
+}
+
+/**
+ * 订阅者类，必须使用new关键字进行实例化
+ * @param {String} name Subscribe名字
+ */
+function Subscribe (name) {
+  if (!new.target) { throw new Error('This is a Constructor Function, please use new keyword!'); }
+  this.name = name;
+}
+
+/**
+ * 由于每个订阅者都有notice消息功能，为了节省资源消耗，所有实例共享这个方法。
+ * 但是重写prototype会丢失constructor属性，因此需要给constructor重新赋值
+ */
+Subscribe.prototype = {
+  constructor: Subscribe,
+  notice (mes) {
+    console.log('My name is ' + this.name + ', I attention "' + mes + '" ready update!');
+  }
+}

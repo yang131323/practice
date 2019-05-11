@@ -37,3 +37,7 @@ export const isSymbol = function (val) {
 export const isObject = function (val) {
   return Object.prototype.toString.call(val) === '[object Object]';
 }
+
+export function isNullUndefinedNaN (val) {
+  return isNull(val) || isUndefined(val) || isNaN(val);
+}
