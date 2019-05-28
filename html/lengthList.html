@@ -149,7 +149,7 @@
     }
 
     const dom = document.getElementById('container');
-    dom.onscroll = throttling(handleScroll, 200, 500);
+    dom.onscroll = throttling(handleScroll, 0, 200);
     handleScroll(); // 初始化首屏
   </script>
 </body>
