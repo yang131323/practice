@@ -20,31 +20,39 @@ var isSameTree = function(p, q) {
 //   right:  { val: 3, right: null, left: null },
 //   left:  { val: 2, right: null, left: null } }))
 
-// 验证二叉搜索树
-var isValidBST = function(root, layer = 0) {
-  if (!root) { return true; }
-  let tempL = isValidBST(root.left, layer + 1);
-  let reL = tempL;
-  if (layer !== 0 && typeof tempL === 'boolean') { return tempL ? root.val : tempL; }
-  else if (typeof tempL === 'number') {
-    reL = tempL >= root.val ? false : (layer === 0 ? tempL : root.val);
-    if (layer !== 0) { return reL };
+// leetcode 98:验证二叉搜索树
+var isValidBST2 = function(root, level = 0) {
+  if ((level === 0 && !root) || (level === 0 && root.val === 0 && !root.left && !root.right)) { return true; }
+  if (!root.left && !root.right) {
+    let result = level === 0 ? true : root.val;
+    return result;
   }
-  let tempR = isValidBST(root.right, layer + 1);
-  let reR = tempR;
-  if (layer !== 0 && typeof tempR === 'boolean') { return tempR ? root.val : tempR; }
-  else if (typeof tempR === 'number') {
-    reR = tempR > root.val ? (layer === 0 ? tempR : root.val): false;
-    if (layer !== 0) { return reR };
-  }
-  if (layer === 0) { return Boolean(reL) && Boolean(reR); }
+  level++;
+  return (!root.left || (root.left && isValidBST(root.left, level) < root.val)) && (!root.right || (root.right && isValidBST(root.right, level) > root.val)) && ((root.right && root.right.val) || root.val);
 };
 
-  console.log(isValidBST( {
-    val: 10,
-    right:
-      {
-       val: 15,
-       right:  { val: 20, right: null, left: null },
-       left:  { val: 6, right: null, left: null } },
-    left:  { val: 5, right: null, left: null } }));
+let temp = null;
+
+var isValidBST = function (root) {
+  if (!root) { return true; }
+  if (!isValidBST(root.left)) { return false; }
+  if (temp !== null && temp >= root.val) { return false; }
+  temp = root.val;
+  if (!isValidBST(root.right)) { return false; }
+  return true;
+}
+
+var isValidBST1 = function (root, result = []) {
+  if (!root) { return true; }
+  // if (!root.left && !root.right) { return true; }
+  if (!isValidBST(root.left, result)) { return false; }
+  if (result.length > 0 && root.val <= result[result.length - 1]) { return false; }
+  result.push(root.val);
+  if (!isValidBST(root.right), result) { return false; }
+  return true;
+}
+
+  console.log(isValidBST({
+    val: 0,
+    right: null,
+    left: null}));

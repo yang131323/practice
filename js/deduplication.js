@@ -11,7 +11,8 @@ function setFun (arr) {
 }
 
 /**
- * 使用对象key（typeof + item）过滤
+ * 使用对象key（typeof + item）过滤，由于Object的key都是String，
+ * 所以0、'0'会被当作一个属性，因此加上类型作为键值更为保险
  * @param {Array} arr
  * @returns {Array}
  */
