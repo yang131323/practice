@@ -46,6 +46,6 @@ export function isDate (val) {
   return Object.prototype.toString.call(val) === '[object Date]';
 }
 
-export function isRegEXp () {
+export function isRegEXp (val) {
   return Object.prototype.toString.call(val) === '[object RegExp]';
 }

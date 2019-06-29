@@ -1,4 +1,4 @@
-import { isArray, isObject, isNull } from "./utils";
+import { isArray, isObject, isNull, isDate, isRegEXp } from "./utils";
 
 // 使用Proxy模拟实现数组或者使用访问器属性模拟实现数组（286）
 // 个人觉得扁平化就是递归，比较喜欢concat和reduce版本
@@ -103,4 +103,26 @@ function deepCloneTwo (data) {
     return child;
   }
   return _clone(data);
+}
+
+/**
+ * 深拷贝简洁完整版
+ * @param {Object} obj 
+ * @param {WeakMap} storage 
+ */
+function deepClone (obj, storage = new WeakMap()) {
+  if (isDate(obj)) { return new Date(obj); }
+  if (isRegEXp(obj)) { return new RegExp(obj); }
+  if (obj === null || obj === undefined || !isObject(obj)) {
+    return obj;
+  }
+  if (storage.has(obj)) { return storage.get(obj); }
+  let target = Object.create(obj);
+  storage.set(obj, target);
+  for (let x in obj) {
+    if (obj.hasOwnProperty(x)) {
+      target[x] = deepClone(obj[x], storage);
+    }
+  }
+  return target;
 }
