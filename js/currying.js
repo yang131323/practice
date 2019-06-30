@@ -61,3 +61,28 @@ var val = curring(add);
 val(1)(2)(3)(4)(5) + 10; // 25
 val(1, 2, 3, 4) + 5; // 15
 val(1, 2)(3, 4) + 5; // 15
+
+/**
+ *  柯里化一般形式，兼容性更好
+ */
+function curr () {
+  let args = [].slice.call(arguments, 1);
+  let fn = arguments[0];
+  let func = function () {
+    let ars = [].slice.call(arguments);
+    args = args.concat(ars);
+    return eval('curr(fn, ' + args.join(',') + ')');
+  }
+  return fn.length > args.length ? func : eval('fn(' + args.join(',') + ')');
+}
+
+/**
+ * 柯里化一般rest形式，只支持ES6+浏览器
+ * @param {Function} fn 
+ * @param  {...any} args 
+ */
+function currRest (fn, ...args) {
+  return fn.length > args.length ? (function (...ars) {
+    return curr(fn, ...args, ...ars);
+  }) : fn(...args);
+}

@@ -4,6 +4,15 @@ import { isArray, isObject, isNull, isDate, isRegEXp } from "./utils";
 // 个人觉得扁平化就是递归，比较喜欢concat和reduce版本
 
 /**
+ * 使用Es6 Array.prototype.flat方法
+ * @param {Array} arrs 
+ * @param {Number} deepth 
+ */
+function flatten (arrs, deepth) {
+  return arrs.flat(deepth);
+}
+
+/**
  * 多维数组扁平化
  * @param {Array} arr 
  */
