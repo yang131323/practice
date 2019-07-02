@@ -51,9 +51,9 @@ var longestPalindrome = function(s) {
   let pl = [];
   let cS = s;
   cS = '#';
-    for (let i = 0, len = s.length; i < len; i++) {
-        cS += s[i] + '#';
-    } 
+  for (let i = 0, len = s.length; i < len; i++) {
+      cS += s[i] + '#';
+  } 
   let len = cS.length;
   pl.length = len;
   pl.fill(0, 0);

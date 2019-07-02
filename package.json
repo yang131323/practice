@@ -21,5 +21,6 @@
   "bugs": {
     "url": "https://github.com/yang131323/practice/issues"
   },
-  "homepage": "https://github.com/yang131323/practice#readme"
+  "homepage": "https://github.com/yang131323/practice#readme",
+  "devDependencies": {}
 }
