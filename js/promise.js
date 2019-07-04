@@ -108,7 +108,7 @@ Promise.prototype.then = function (onFulfiled, onRejected) {
 
 function resolvePromise (promise2, x, resolve, reject) {
   if (promise2 === x) {
-    // 这里需要reject状态
+    // 这里需要reject状态，而且需要是TypeError类型
     reject(new TypeError('Circle interfence!'));
   }
   let used = false;
