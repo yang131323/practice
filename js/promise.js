@@ -21,6 +21,13 @@ const { isFunction, isObject } = require('./utils');
 const PENDING = 'pending';
 const FULFILLED = 'fulfilled';
 const REJECTED = 'rejected';
+
+/**
+ * Promise构造函数只做两件事：
+ * 1. 初始化resolve，reject
+ * 2. 执行执行执行器
+ * @param {Function} executor Promise执行器，同步执行
+ */
 function Promise (executor) {
   const self = this;
   self.onFulfiled = [];
@@ -56,6 +63,13 @@ function Promise (executor) {
   }
 }
 
+/**
+ * then方法总是返回一个新的Promise，如果onFulfiled、onRejected
+ * 返回的是一个Promise或者是thenable对象，则需要等待他们的执行结果；
+ * then方法传入的回调是异步执行的，因此onFulfiled、onRejected使用setTimeout包裹
+ * @param {Function} onFulfiled fullfiled状态执行的回调函数
+ * @param {Function} onRejected rejected状态执行的回调函数
+ */
 Promise.prototype.then = function (onFulfiled, onRejected) {
   const self = this;
   onFulfiled = isFunction(onFulfiled) ? onFulfiled : value => value;
@@ -106,6 +120,13 @@ Promise.prototype.then = function (onFulfiled, onRejected) {
   return promise2;
 }
 
+/**
+ * 判断回调的执行结果类型，防止生成循环链接
+ * @param {Promise} promise2 
+ * @param {*} x 
+ * @param {Function} resolve 
+ * @param {Function} reject 
+ */
 function resolvePromise (promise2, x, resolve, reject) {
   if (promise2 === x) {
     // 这里需要reject状态，而且需要是TypeError类型
@@ -141,17 +162,94 @@ function resolvePromise (promise2, x, resolve, reject) {
   }
 }
 
-
-Promise.defer = Promise.deferred = function () {
-  let dfd = {};
-  dfd.promise = new Promise((resolve, reject) => {
-      dfd.resolve = resolve;
-      dfd.reject = reject;
+/**
+ * 将任意一个value封装成Promise，如果value是Promise则直接返回
+ * 如果value是一个thenable对象则需要SetTimeout延后，其他情况直接resolve原值
+ * @param {*} value
+ */
+Promise.resolve = function (value) {
+  if (value instanceof Promise) {
+    return value;
+  }
+  return new Promise ((resolve, reject) => {
+    // 原生Promise中thenable对象延后其他情况
+    if (value && value.then && isFunction(value.then)) {
+      setTimeout(() => {
+        value.then(resolve, reject);
+      });
+    } else {
+      resolve(value);
+    };
   });
-  return dfd;
 }
 
+/**
+ * 将值封装为Promise，直接reject原值
+ * @param {*} value 
+ */
+Promise.reject = function (value) {
+  return new Promise((resolve, reject) => {
+    reject(value);
+  });
+}
 
+/**
+ * 等待第一Promise返回的状态就结束，如果是一个不可迭代的值，则抛错
+ * 如果是一个空数组，则一直处于pending状态，其余情况均为第一Promise的结果
+ * @param {*} promises
+ */
+Promise.prototype.race = function (promises) {
+  // 返回一个Promise
+  return new Promise((resolve, reject) => {
+    if (!promises[Symbol.iterator] || !isFunction(promises[Symbol.iterator])) {
+      // 不是直接抛出错误，而是reject
+      Promise.reject('promises not is iteratorable!');
+    }
+    if (promises.length === 0) {
+      return;
+    }
+    for (let i = 0; i < promises.length; i++) {
+      // pormises[i]不一定是一个Promise，为了安全起见需使用Promise.resolve封装一下
+      Promise.resolve(promises[i]).then((data) => {
+        resolve(data);
+        return;
+      }, (e) => {
+        reject(e);
+        return;
+      });
+    }
+  });
+}
+
+/**
+ * catch是then 的一种特殊形式，因此catch也总是返回一个新的Promise
+ * @param {Function} callback
+ */
+Promise.prototype.catch = function (callback) {
+  return this.then(null, callback);
+}
+
+/**
+ * 不管是fulfilled还是rejected都会执行，并且后面能够再次调用then，将原值传递下去
+ * @param {Function} callback
+ */
+Promise.prototype.finally = function (callback) {
+  return this.then((value) => {
+    return Promise.resolve(callback()).then(() => {
+      return value;
+    });
+  }, (e) => {
+    return Promise.resolve(callback()).then(() => {
+      throw e;
+    });
+  })
+}
+
+/**
+ * 并发执行所有Promise，一旦有一个Promise状态变为rejected返回结果就是该Promise的状态
+ * 只有所有的Promise的状态全部为fulfilled放回的状态的才会为fulfilled状态，是一个所有Promise结果的数组
+ * @param {Array} promises
+ */
 Promise.prototype.all = function (promises) {
   return new Promise((resolve, reject) => {
     promises = Array.from(promises);
@@ -170,6 +268,15 @@ Promise.prototype.all = function (promises) {
       })
     }
   })
+}
+
+Promise.defer = Promise.deferred = function () {
+  let dfd = {};
+  dfd.promise = new Promise((resolve, reject) => {
+      dfd.resolve = resolve;
+      dfd.reject = reject;
+  });
+  return dfd;
 }
 
 module.exports = Promise;
