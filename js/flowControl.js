@@ -41,8 +41,8 @@ function debounce (fn, wait, immediate = false) {
 function throttle (fn, wait, options = {}) {
   let previous = 0, timer = null, context = null, result = null;
   let later = function (params) {
-    previous = Date.now();
     result = fn.apply(context, params);
+    previous = Date.now();
     timer = context = null;
   }
   let throttled  = function (...args) {
