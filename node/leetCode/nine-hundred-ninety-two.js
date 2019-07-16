@@ -55,4 +55,4 @@ function sort (arr, i, j) {
   return arr;
 }
 
-console.log(sort([5, 6, 2, 4, 1, 10, 4, 3, 5, 8, 9], 0, 10));
+console.log(sort([1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 13, 14, 10], 0, 13));
