@@ -81,8 +81,8 @@ Function.prototype.bind = function (context) {
 function createObj (constructor) {
   if (!(constructor instanceof Function)) { throw new Error('caller not function!'); }
   var obj = new Object();
-  obj.__proto__ = constructor;
+  obj.__proto__ = constructor.prototype;
   var args = [].slice.call(arguments, 1);
-  var val = constructor.apply(obj, [].slice.call(arguments, 1));
+  var val = constructor.apply(obj, args);
   return (val instanceof Object) ? val : obj;
 }

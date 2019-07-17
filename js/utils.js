@@ -50,6 +50,27 @@ function isRegEXp (val) {
   return Object.prototype.toString.call(val) === '[object RegExp]';
 }
 
+function objGet (obj, path, def = undefined) {
+  if (!isString(path) || !path) { return obj; }
+  try {
+    path = path.split('.');
+    path.forEach((val) => {
+      obj = obj[val];
+    });
+    return obj;
+  } catch (e) {
+    return def;
+  }
+}
+
+function get (obj, ...args) {
+  return args.map((val) => (new Function('obj', 'def', `try {
+    return obj.${val};
+  } catch (e) {
+    return def;
+  }`))(obj, undefined));
+}
+
 module.exports = {
   isArray,
   isBoolean,
@@ -63,5 +84,6 @@ module.exports = {
   isRegEXp,
   isUndefined,
   isString,
-  isSymbol
+  isSymbol,
+  objGet
 }
