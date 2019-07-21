@@ -1,5 +1,6 @@
 /**
  * 200. 岛屿数量
+ * 解题思路：很容易就能看出来是一个并查集的一个应用，就是算岛屿构成了几个子集，只需要把水排除干扰就行
  * @param {Array} grid 
  */
 var numIslands = function(grid) {
