@@ -1,1 +1,12 @@
 .vscode/
+.DS_Store
+._*
+Thumbs.db
+.Spotlight-V100
+.Trashes
+*.swp
+*.swa
+*.swo
+venv
+node_modules/
+.sass-cache
