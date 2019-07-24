@@ -17,13 +17,3 @@ var canVisitAllRooms = function(rooms) {
   }
   return passBy.size === rooms.length;
 };
-
-/* 
-while (stack.length !== 0) {
-    cur = rooms[cur].length > 0 ? rooms[cur].pop() : stack.pop();
-    if (passBy.indexOf(cur) > -1) {
-      cur = stack.pop();
-      continue;
-    }
-  }
-*/
