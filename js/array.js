@@ -57,7 +57,7 @@ function randomArrayOne (arr) {
 /**
  * 将数组随机打乱方式二
  * 每次确定一个位置的数字-这个数字是随机确定的
- * @param {*} arr 
+ * @param {Array} arr 
  */
 function randomArrayTwo (arr) {
   if (!isArray(arr)) { throw new Error('argument except is a array!'); }
