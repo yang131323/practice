@@ -33,7 +33,7 @@ function flatString (arr) {
 
 /**
  * 使用concat进行数组扁平化
- * @param {Array} arr 
+ * @param {Array} arr
  */
 function flatConcat(arr) {
   if (!Array.isArray(arr)) { return [arr]; }
