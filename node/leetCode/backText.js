@@ -36,8 +36,8 @@ function getArrayP(str){
       }
       // 当有更大的回文串出现时，更新中心位置和最大边界值
       if (i + p[i] > mx) {  
-          id = i;  
-          mx = id + p[i];  
+          id = i;
+          mx = id + p[i];
       }  
   }  
   return p;
