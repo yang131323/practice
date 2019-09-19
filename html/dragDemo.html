@@ -21,20 +21,86 @@
       margin: 10px;
       display: inline-block;
     }
+
+    .drag-item {
+      border: 2 dashed springgreen;
+      background: #eee;
+    }
+
+    .drop-item {
+      position: relative;
+      bottom: 0;
+      right: 0;
+      border: 1px solid red;
+      background: springgreen;
+      width: 500px;
+      height: 300px;
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="sort-item">4</div>
-    <div class="sort-item">1</div>
-    <div class="sort-item">2</div>
-    <div class="sort-item">3</div>
-    <div class="sort-item">9</div>
-    <div class="sort-item">10</div>
-    <div class="sort-item">7</div>
-    <div class="sort-item">8</div>
-    <div class="sort-item">6</div>
-    <div class="sort-item">5</div>
+    <div class="sort-item" draggable="true">4</div>
+    <div class="sort-item" draggable="true">1</div>
+    <div class="sort-item" draggable="true">2</div>
+    <div class="sort-item" draggable="true">3</div>
+    <div class="sort-item" draggable="true">9</div>
+    <div class="sort-item" draggable="true">10</div>
+    <div class="sort-item" draggable="true">7</div>
+    <div class="sort-item" draggable="true">8</div>
+    <div class="sort-item" draggable="true">6</div>
+    <div class="sort-item" draggable="true">5</div>
+    <!-- <div class="drop-item">place</div> -->
   </div>
+  <script>
+    let dragedDom = null;
+    function init () {
+      const doms = document.querySelectorAll('.sort-item');
+      for (let i = 0; i < doms.length; i++) {
+        doms[i].addEventListener('dragstart', function (dom) {
+          console.log('dragstart: ', dom);
+          this.classList.add('drag-item');
+          dragedDom = this;
+        });
+
+        doms[i].addEventListener('dragenter', function (dom) {
+          if (this !== dragedDom && this === this.parentNode.lastChild || this === this.parentNode.lastElementChild) {
+            this.parentNode.appendChild(dragedDom);
+          } else {
+            console.log('dragenter: ');
+            dom.dataTransfer.dropEffect = 'copy';
+            this.parentNode.insertBefore(dragedDom, this);
+          }
+        });
+      }
+    }
+
+    const container = document.getElementsByClassName('container')[0];
+    const place = document.getElementsByClassName('drop-item')[0];
+    container.addEventListener('dragover', function (dom) {
+      console.log('dragover: ');
+      dom.preventDefault();
+    });
+
+    container.addEventListener('drop', function (dom) {
+      console.log('drop: ');
+      dom.preventDefault();
+      dragedDom.classList.remove('drag-item');
+    })
+
+    // place.addEventListener('dragover', function (dom) {
+    //   console.log('place over: ');
+    //   dom.preventDefault();
+    // });
+
+    // place.addEventListener('drop', function (dom) {
+    //   console.log('place drop: ');
+    //   this.appendChild(dragedDom);
+    //   dom.preventDefault();
+    //   console.log(this);
+    // })
+
+    window.onload = init;
+  </script>
 </body>
 </html>
