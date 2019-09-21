@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Position Layout</title>
+  <style>
+    .container {
+      position: relative;
+      border: 1px solid sandybrown;
+    }
+
+    .main {
+      margin: 0 160px 0 240px;
+      height: 280px;
+      background: red;
+    }
+
+    .left {
+      position: absolute;
+      top: 0;
+      left: 0;
+      background: yellow;
+      width: 240px;
+      height: 320px;
+    }
+
+    .rigth {
+      position: absolute;
+      top: 0;
+      right: 0;
+      background: blue;
+      height: 400px;
+      width: 160px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="main"></div>
+    <div class="left"></div>
+    <div class="rigth"></div>
+  </div>
+</body>
+</html>

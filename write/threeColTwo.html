@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Double Fly Wing</title>
+  <style>
+    .container {
+      width: 100%;
+      float: left; /* BFC */
+    }
+
+    .main {
+      margin: 0 200px 0 160px;
+      height: 420px;
+      background: red;
+    }
+
+    .left {
+      float: left;
+      width: 160px;
+      height: 240px;
+      background: yellow;
+      margin-left: -100%;
+    }
+
+    .right {
+      float: right;
+      width: 200px;
+      background: blue;
+      height: 360px;
+      margin-left: -200px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="main"></div>
+  </div>
+  <div class="left"></div>
+  <div class="right"></div>
+</body>
+</html>

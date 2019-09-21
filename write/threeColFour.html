@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Flex Three Column layout!</title>
+  <style>
+    .container {
+      display: flex;
+      width: 100%;
+      border: 1px solid sandybrown;
+    }
+
+    .main {
+      flex: 1 1;
+      height: 300px;
+      background: red;
+    }
+
+    .left {
+      order: -1;
+      flex: 0 0 200px;
+      height: 360px;
+      background: yellow;
+    }
+
+    .right {
+      flex: 0 0 240px;
+      height: 480px;
+      background: blue;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="main"></div>
+    <div class="left"></div>
+    <div class="right"></div>
+  </div>
+</body>
+</html>
