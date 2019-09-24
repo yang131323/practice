@@ -8,27 +8,28 @@ function debounce (fn, wait = 10, immediate = false) {
         context = args = null;
       }
     }, wait);
+  }
 
-    function debounced () {
-      if (!timer) {
-        later();
-        if (immediate) {
-          fn.apply(this, arguments);
-        } else {
-          args = [].slice.call(arguments);
-          context = this;
-        }
+  function debounced () {
+    if (!timer) {
+      later();
+      if (immediate) {
+        fn.apply(this, arguments);
       } else {
-        clearTimeout(timer);
-        later();
+        args = [].slice.call(arguments);
+        context = this;
       }
+    } else {
+      clearTimeout(timer);
+      later();
     }
   }
+
   return debounced;
 }
 
 /**
- * 最终理解：参数leading是每一次起始函数都会跳过，至于怎么跳过就是根据pre的出使值来确定的，pre默认是零，如果没有给它重新赋值，那么第一判断wait - now一定小于零，
+ * 最终理解：参数leading是每一次起始函数都会跳过，至于怎么跳过就是根据pre的初始值来确定的，pre默认是零，如果没有给它重新赋值，那么第一判断wait - now一定小于零，
  * 也就是一点击（绑定事件）就会立即执行，如果碰到leading为false就将pre置为0，这样就可以每次都跳过点击开始，函数被调用的情况，trailing相反。
  * @param {Function} fn 
  * @param {Number} wait 
