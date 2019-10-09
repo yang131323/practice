@@ -2,7 +2,7 @@
 var longestPalindrome1 = function(s) {
   if (!s) { return s; }
   const judgeBackText = function (text) {
-      return text === text.split('').reverse().join('');
+    return text === text.split('').reverse().join('');
   }
   let len = s.length;
   let result = '';
