@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Swiper & is Q</title>
+  <style>
+    .swiper-container {
+      height: 400px;
+      width: 800px;
+      background: #eeeeee;
+      position: relative;
+      top: 100px;
+      left: 200px;
+      /* border: 1px solid #eeeeee; */
+    }
+
+    ul.swiper-pagination {
+      position: absolute;
+      bottom: 20px;
+      left: calc((800px - 144px) / 2);
+      list-style: none;
+      display: inline-block;
+    }
+
+    .swiper-pagination>li {
+      width: 20px;
+      height: 20px;
+      margin-left: 8px;
+      text-align: center;
+      font-size: 14px;
+      display: inline-block;
+      background: #ffffff;
+      border-radius: 10px;
+    }
+
+    .swiper-pagination>li:hover {
+      background: #339999;
+    }
+
+    .swiper-left, .swiper-right {
+      position: absolute;
+      top: calc((400px - 80px) / 2);
+      font-size: 40px;
+      line-height: 80px;
+      width: 40px;
+      background: #b9b4b4;
+      text-align: center;
+      opacity: .2;
+    }
+
+    .swiper-left {
+      left: 0;
+    }
+
+    .swiper-right {
+      right: 0;
+    }
+
+    .swiper-left:hover, .swiper-right:hover {
+      opacity: .6;
+      background: #666666;
+    }
+  </style>
+</head>
+<body>
+  <div class="swiper-container">
+    <ul class="swiper-pagination">
+      <li>1</li>
+      <li>2</li>
+      <li>3</li>
+      <li>4</li>
+    </ul>
+    <div class="swiper-left">&lt;</div>
+    <div class="swiper-right">&gt;</div>
+  </div>
+</body>
+<script type="text/javascript">
+  class Swiper {
+    /**
+     * @class
+     * @param {Object} obj Swiper配置对象
+     * @prop {Number} width swiper容器宽度|800px
+     * @prop {Number} height swiper容器高度|400px
+     * @prop {Boolean} isPagination 是否显示分页|true
+     * @prop {Boolean} isButton 是否显示左右切换键|true
+     * @prop {Boolean} isOrder 显示分页时是否显示序号而不是空点|false
+     * @prop {Array<String>} imgs 轮播图片集合|[]
+     * @prop {Boolean} isAutoPlayer 是否自动播放|true
+     * @prop {Number} time 默认多久切换图片|3000ms
+     */
+    constructor (obj) {
+      this.width = obj.width;
+      this.height = obj.height;
+      this.isPagination = obj.isPagination;
+      this.isButton = obj.isButton;
+      this.isOrder = obj.isOrder;
+      this.imgs = obj.imgs || [];
+      this.isAutoPlayer = obj.isAutoPlayer !== undefined ? obj.isAutoPlayer : true;
+      this.time = obj.time || 3000;
+      this._pre = null;
+      this.current = 0;
+      this.len = this.imgs.length;
+      this.init();
+    }
+
+    // 由于mouseout、mouseenter不是冒泡事件，因此当鼠标移动到存在这两个事件的元素上也会触发，如：dom1绑定了mouseout事件，dom2是dom1的子节点，如果进入dom2将也会触发mouseout事件
+    init () {
+      this._swiperContainer = document.getElementsByClassName('swiper-container')[0];
+      this._swiperPagination = document.getElementsByClassName('swiper-pagination')[0];
+      this._swiperLeftButton = document.getElementsByClassName('swiper-left')[0];
+      this._swiperRightButton = document.getElementsByClassName('swiper-right')[0];
+      this.initTools();
+      this.bindEvents();
+      this.clearDoms();
+    }
+
+    _setDomStyle (dom, options = {}) {
+      if (!dom) return;
+      let str = dom.style.cssText || '';
+      for (let x in options) {
+        str += x + ':' + options[x] + ';';
+      }
+      dom.style.cssText = str;
+    }
+
+    clearDoms () {
+      const domProps = ['_swiperLeftButton', '_swiperRightButton']; // '_swiperContainer', '_swiperImg', '_swiperPagination'
+      try {
+        for (let x of domProps) {
+          this[x] = null;
+          delete this[x];
+        }
+      } catch (e) {
+        console.log(e.message);
+      }
+    }
+
+    initPagination () {
+      let fragments = [];
+      for (let i = 0; i < this.len; i++) {
+        const li = '<li>'+ (this.isOrder ? (i + 1) : '') + '</li>';
+        fragments.push(li);
+      }
+      this._swiperPagination.innerHTML = fragments.join('');
+    }
+
+    initTools () {
+      if (this.width && this.width > 0) {
+        this._setDomStyle(this._swiperContainer, {width: `${this.width}px`});
+        this._setDomStyle(this._swiperImg, {width: `${this.width}px`});
+      }
+      if (this.height && this.height > 0) {
+        this._setDomStyle(this._swiperContainer, {height: `${this.height}px`});
+        this._setDomStyle(this._swiperImg, {height: `${this.height}px`});
+        const buttonTop = ((this.height || 400) - 80) / 2;  
+        this._setDomStyle(this._swiperLeftButton, {
+          top: buttonTop + 'px'
+        });
+        this._setDomStyle(this._swiperRightButton, {
+          top: buttonTop + 'px'
+        });
+      }
+      if (this.isPagination === false) {
+        this._setDomStyle(this._swiperPagination, {
+          display: 'none',
+        });
+      } else {
+        this.initPagination();
+      }
+      if (this.isButton) {
+        this._setDomStyle(this._swiperLeftButton, {display: 'none'});
+        this._setDomStyle(this._swiperRightButton, {display: 'none'});
+      }
+      if (this.len > 0) {
+        const lis = this._swiperPagination.getElementsByTagName('li');
+        this._setDomStyle(lis[this.current % this.len], {background: '#339999'});
+        // this._swiperImg.setAttribute('url', this.imgs[this.current]);
+        this._initImg();
+        this._setDomStyle(this._swiperPagination, {
+          left: (((this.width || 800) - this.len * 30) / 2) + 'px'
+        });
+        console.log(this.imgs[this.current]);
+      }
+    }
+
+    _initImg () {
+      let img = new Image(this.width || 800, this.height || 400);
+      img.src = this.imgs[this.current];
+      img.alt = 'Swiper';
+      img.className = 'swiper-img';
+      const imgCallback = () => {
+        const swiperImg = [].slice.call(document.getElementsByClassName('swiper-img'));
+        if (swiperImg.length <= 0) {
+          this._swiperContainer.insertBefore(img, this._swiperPagination);
+          this._swiperImg = document.getElementsByClassName('swiper-img')[0];
+          this._swiperImg.addEventListener('mouseenter', this._containerCallback.bind(this)); // mouseenter不是冒泡事件
+          this._swiperImg.addEventListener('mouseout', this._startUpTimer.bind(this)); // mouseout不是冒泡事件
+          this._swiperContainer = null;
+          delete this._swiperContainer;
+          img = null;
+        }
+      }
+      img.onload = imgCallback;
+      img.onloadend = imgCallback;
+    }
+
+    _convertImg (isClearTimer = false, isAsc = true) {
+      if (isClearTimer) {
+        this._containerCallback();
+      }
+      this._pre = this.current;
+      if (isAsc) {
+        this.current++;
+      } else {
+        this.current--;
+        this.current = this.current < 0 ? this.len - 1 : this.current;
+      }
+      const lis = this._swiperPagination.getElementsByTagName('li');
+      this._setDomStyle(lis[this._pre % this.len], {background: '#ffffff'});
+      this._swiperImg.setAttribute('src', this.imgs[this.current % this.len]);
+      this._setDomStyle(lis[this.current % this.len], {background: '#339999'});
+    }
+
+    _containerCallback () {
+      clearInterval(this._timer);
+    }
+
+    _startUpTimer () {
+      if (this.isAutoPlayer) {
+        this._timer = setInterval(this._convertImg.bind(this), this.time);
+      }
+    }
+
+    _paginationCallback (e) {
+      this._containerCallback();
+      this._pre = this.current;
+      let lis = this._swiperPagination.getElementsByTagName('li');
+      lis = [].slice.call(lis);
+      const index = lis.indexOf(e.target);
+      if (index === -1) return;
+      this.current = index;
+      this._setDomStyle(lis[this._pre % this.len], {background: '#ffffff'});
+      this._swiperImg.setAttribute('src', this.imgs[this.current % this.len]);
+      this._setDomStyle(lis[this.current % this.len], {background: '#339999'});
+    }
+    
+    bindEvents () {
+      this._startUpTimer();
+      this._swiperLeftButton.addEventListener('click', this._convertImg.bind(this, true, false));
+      this._swiperRightButton.addEventListener('click', this._convertImg.bind(this, true));
+      this._swiperPagination.addEventListener('mouseover', this._paginationCallback.bind(this));
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const imgs = [];
+    for (let i = 1, len = 3; i <= len; i++) {
+      const img = '../img/' + i + '.png';
+      imgs.push(img);
+    }
+    const swiper = new Swiper({
+    imgs,
+    time: 2000,
+    width: 800,
+    height: 420,
+    isOrder: true,
+    isAutoPlayer: false
+  })
+  })
+</script>
+</html>

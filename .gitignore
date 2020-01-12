@@ -1,4 +1,6 @@
+# vscode调试配置
 .vscode/
+# mac环境文件
 .DS_Store
 ._*
 Thumbs.db

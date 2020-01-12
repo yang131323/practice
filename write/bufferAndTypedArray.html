@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Test ArrayBuffer to str and str to ArrayBuffer!</title>
+</head>
+<body>
+  <input type="file" onchange="testConvert(this.files)">
+  <script>
+    // ArrayBuffer转为字符串
+    function buffToStr (buff) {
+      if (!buff) { throw TypeError('buff is required, but buff is ' + typeof buff); }
+      return String.fromCharCode.apply(null, new Uint16Array(buff));
+    }
+
+    // 字符串转ArrayBuffer
+    function strToBuff (str) {
+      const len = str.length * 2;
+      // 创建arraybuffer实例
+      const buff = new ArrayBuffer(len);
+      // 创建操作buffer的view
+      const int16Arr = new Uint16Array(buff);
+      // 逐个将每一个字符串转为arraybuffer中的数据
+      for (let i = 0; i < len; i++) {
+        int16Arr[i] = str[i];
+      }
+      return buff;
+    }
+
+    function testConvert (event) {
+      // console.log(event);
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const str = buffToStr(e.target.result);
+        console.log('buff to Str: ', str);
+        const buff = strToBuff(str);
+        console.log('str to buff: ', buff);
+      }
+      reader.readAsArrayBuffer(event[0]);
+    }
+  </script>
+</body>
+</html>
